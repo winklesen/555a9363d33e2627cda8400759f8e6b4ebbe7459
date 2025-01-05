@@ -30,6 +30,10 @@
               <tr>
                 <th>No.</th>
                 <th>Nama Sekolah</th>
+                <th>Group</th>
+                <th>Point Per Sesi</th>
+                <th>Point</th>
+                <th>Berat Point</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -119,6 +123,10 @@
                   }
                 },
                 { data: 'nama_sekolah', name: 'nama_sekolah' },
+                { data: 'group', name: 'group' },
+                { data: 'point_per_sesi', name: 'point_per_sesi', orderable: false, searchable: false },
+                { data: 'point', name: 'point' },
+                { data: 'berat_point', name: 'berat_point' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
@@ -176,7 +184,6 @@
       $.LoadingOverlay("show");
       
       const id = $(this).data('id');
-      console.log(provinsiId, id)
       $.ajax({
         url: "{{ route('penyisihan.provinsi.sekolah.show', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
         method: 'GET',
@@ -287,6 +294,33 @@
                 });
             }
         });
+    });
+
+    $(document).on('click', '.setGroup', function () {
+      $.LoadingOverlay("show");
+      
+      const id = $(this).data('id');
+      $.ajax({
+        url: "{{ route('penyisihan.provinsi.sekolah.set-group', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+        method: 'GET',
+        success: function (data) {
+          $.LoadingOverlay("hide");
+
+          Swal.fire(
+              'Success!',
+              data.message,
+              'success'
+          );
+        },
+        error: function (error) {
+            console.log(error)
+            Swal.fire(
+                'Error!',
+                'Terjadi kesalahan. Silakan coba lagi.',
+                'error'
+            );
+        }
+      });
     });
   </script>
 @endpush

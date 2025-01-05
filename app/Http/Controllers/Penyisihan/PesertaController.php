@@ -16,12 +16,12 @@ class PesertaController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<div class="btn-list">';
-                    $btn .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
-                    $btn .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
-                    $btn .= '</div>';
+                    $html = '<div class="btn-list">';
+                    $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
+                    $html .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
+                    $html .= '</div>';
 
-                    return $btn;
+                    return $html;
                 })
                 ->rawColumns(['action'])
                 ->make(true);

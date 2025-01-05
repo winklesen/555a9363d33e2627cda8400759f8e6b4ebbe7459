@@ -26,4 +26,8 @@ class Sekolah extends Model
     public function pendampings() {
         return $this->hasMany(Sekolah::class);
     }
+
+    public function points() {
+        return $this->hasMany(Point::class);
+    }
 }

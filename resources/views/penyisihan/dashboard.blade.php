@@ -51,161 +51,167 @@
     stroke-linecap: round;
   }
 </style>
-<table class="table table-borderless">
-  <tbody>
-    <tr>
-      <td>
-        <div id="slot1penyisihan1" class="card border slot-group1">
-          <div class="card-body">
-            <div>Slot 1 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot2penyisihan1" class="card border slot-group1">
-          <div class="card-body">
-            <div>Slot 2 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td>
-        <div id="slot1penyisihan2" class="card mb-0">
-          <div class="card-body">
-            <div>Slot 1 Penyisihan 2</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot3penyisihan1" class="card border slot-group1">
-          <div class="card-body">
-            <div>Slot 3 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot4penyisihan1" class="card border slot-group2">
-          <div class="card-body">
-            <div>Slot 4 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot5penyisihan1" class="card border slot-group2">
-          <div class="card-body">
-            <div>Slot 5 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td>
-        <div id="slot2penyisihan2" class="card mb-0">
-          <div class="card-body">
-            <div>Slot 2 Penyisihan 2</div>
-          </div>
-        </div>
-      </td>
-      <td>
-        <div id="slot1penyisihan3" class="card mb-0">
-          <div class="card-body">
-            <div>Slot 1 Penyisihan 3</div>
-          </div>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot6penyisihan1" class="card border slot-group2">
-          <div class="card-body">
-            <div>Slot 6 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot7penyisihan1" class="card border slot-group3">
-          <div class="card-body">
-            <div>Slot 7 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot8penyisihan1" class="card border slot-group3">
-          <div class="card-body">
-            <div>Slot 8 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td>
-        <div id="slot3penyisihan2" class="card mb-0">
-          <div class="card-body">
-            <div>Slot 3 Penyisihan 2</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <div id="slot9penyisihan1" class="card border slot-group3">
-          <div class="card-body">
-            <div>Slot 9 Penyisihan 1</div>
-          </div>
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-<svg id="connector">
-  <path id="allPaths"/>
-</svg>
+<div class="container-xl">
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-borderless">
+        <tbody>
+          <tr>
+            <td>
+              <div id="peserta1penyisihan1" class="card border peserta-group1 penyisihan1group1">
+                <div class="card-body">
+                  <div>Peserta 1 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta2penyisihan1" class="card border peserta-group1 penyisihan1group1">
+                <div class="card-body">
+                  <div>Peserta 2 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div id="peserta1penyisihan2" class="card mb-0 peserta1penyisihan2">
+                <div class="card-body">
+                  <div>Peserta 1 Penyisihan 2</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta3penyisihan1" class="card border peserta-group1 penyisihan1group1">
+                <div class="card-body">
+                  <div>Peserta 3 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta4penyisihan1" class="card border peserta-group2 penyisihan1group2">
+                <div class="card-body">
+                  <div>Peserta 4 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta5penyisihan1" class="card border peserta-group2 penyisihan1group2">
+                <div class="card-body">
+                  <div>Peserta 5 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div id="peserta2penyisihan2" class="card mb-0 peserta2penyisihan2">
+                <div class="card-body">
+                  <div>Peserta 2 Penyisihan 2</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div id="peserta1penyisihan3" class="card mb-0 peserta1penyisihan3">
+                <div class="card-body">
+                  <div>Peserta 1 Penyisihan 3</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta6penyisihan1" class="card border peserta-group2 penyisihan1group2">
+                <div class="card-body">
+                  <div>Peserta 6 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta7penyisihan1" class="card border peserta-group3 penyisihan1group3">
+                <div class="card-body">
+                  <div>Peserta 7 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta8penyisihan1" class="card border peserta-group3 penyisihan1group3">
+                <div class="card-body">
+                  <div>Peserta 8 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div id="peserta3penyisihan2" class="card mb-0 peserta3penyisihan2">
+                <div class="card-body">
+                  <div>Peserta 3 Penyisihan 2</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <div id="peserta9penyisihan1" class="card border peserta-group3 penyisihan1group3">
+                <div class="card-body">
+                  <div>Peserta 9 Penyisihan 1</div>
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <svg id="connector">
+        <path id="allPaths"/>
+      </svg>
+    </div>
+  </div>
+</div>
 <script>
   window.onload = function() {
-    const slots = {
-      group1: document.querySelectorAll('.slot-group1'),
-      group2: document.querySelectorAll('.slot-group2'),
-      group3: document.querySelectorAll('.slot-group3')
+    const pesertas = {
+      group1: document.querySelectorAll('.peserta-group1'),
+      group2: document.querySelectorAll('.peserta-group2'),
+      group3: document.querySelectorAll('.peserta-group3')
     };
-    const slot1penyisihan2 = document.getElementById('slot1penyisihan2');
-    const slot2penyisihan2 = document.getElementById('slot2penyisihan2');
-    const slot3penyisihan2 = document.getElementById('slot3penyisihan2');
-    const slot1penyisihan3 = document.getElementById('slot1penyisihan3');
+    const peserta1penyisihan2 = document.getElementById('peserta1penyisihan2');
+    const peserta2penyisihan2 = document.getElementById('peserta2penyisihan2');
+    const peserta3penyisihan2 = document.getElementById('peserta3penyisihan2');
+    const peserta1penyisihan3 = document.getElementById('peserta1penyisihan3');
     const path = document.getElementById('allPaths');
     
     function updatePath() {
       let pathData = '';
 
-      function connectSlots(slots, target) {
+      function connectPesertas(pesertas, target) {
         const targetRect = target.getBoundingClientRect();
         const endX = targetRect.left + targetRect.width / 2;
         const endY = targetRect.top + targetRect.height / 2;
 
-        slots.forEach(slot => {
-          const slotRect = slot.getBoundingClientRect();
-          const startX = slotRect.left + slotRect.width / 2;
-          const startY = slotRect.top + slotRect.height / 2;
+        pesertas.forEach(peserta => {
+          const pesertaRect = peserta.getBoundingClientRect();
+          const startX = pesertaRect.left + pesertaRect.width / 2;
+          const startY = pesertaRect.top + pesertaRect.height / 2;
 
           const middleX = (startX + endX) / 2;
           const middleY = (startY + endY) / 2;
@@ -218,10 +224,10 @@
         });
       }
 
-      connectSlots(slots.group1, slot1penyisihan2);
-      connectSlots(slots.group2, slot2penyisihan2);
-      connectSlots(slots.group3, slot3penyisihan2);
-      connectSlots([slot1penyisihan2, slot2penyisihan2, slot3penyisihan2], slot1penyisihan3);
+      connectPesertas(pesertas.group1, peserta1penyisihan2);
+      connectPesertas(pesertas.group2, peserta2penyisihan2);
+      connectPesertas(pesertas.group3, peserta3penyisihan2);
+      connectPesertas([peserta1penyisihan2, peserta2penyisihan2, peserta3penyisihan2], peserta1penyisihan3);
 
       path.setAttribute("d", pathData);
     }

@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'disableBack' => \App\Http\Middleware\DisableBack::class,
             'disableRedirect' => \App\Http\Middleware\DisableRedirect::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'point',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

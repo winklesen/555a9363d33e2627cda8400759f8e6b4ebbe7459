@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('', ['App\Http\Controllers\LoginController', 'login'])->name('index');
 
+Route::post('point', ['App\Http\Controllers\PointController', 'point'])->name('point');
+
 Route::middleware(['web', 'disableBack'])->group(function() {
     Route::middleware(['disableRedirect'])->group(function() {
         Route::get('login', ['App\Http\Controllers\LoginController', 'login'])->name('login');
@@ -25,6 +27,8 @@ Route::prefix('penyisihan')->name('penyisihan.')->group(function() {
         Route::get('provinsi/{provinsiId}/sekolah/{id}/edit', ['App\Http\Controllers\Penyisihan\SekolahController'::class, 'edit'])->name('provinsi.sekolah.edit');
         Route::put('provinsi/{provinsiId}/sekolah/{id}', ['App\Http\Controllers\Penyisihan\SekolahController'::class, 'update'])->name('provinsi.sekolah.update');
         Route::delete('provinsi/{provinsiId}/sekolah/{id}', ['App\Http\Controllers\Penyisihan\SekolahController'::class, 'destroy'])->name('provinsi.sekolah.destroy');
+
+        Route::get('provinsi/{provinsiId}/sekolah/{id}/set-group', ['App\Http\Controllers\Penyisihan\SekolahController'::class, 'setGroup'])->name('provinsi.sekolah.set-group');
 
         Route::get('provinsi/{provinsiId}/sekolah/{sekolahId}/peserta', ['App\Http\Controllers\Penyisihan\PesertaController'::class, 'index'])->name('provinsi.sekolah.peserta.index');
         Route::get('provinsi/{provinsiId}/sekolah/{sekolahId}/peserta/create', ['App\Http\Controllers\Penyisihan\PesertaController'::class, 'create'])->name('provinsi.sekolah.peserta.create');

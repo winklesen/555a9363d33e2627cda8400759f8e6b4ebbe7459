@@ -15,17 +15,37 @@ class SekolahController extends Controller
             $data = Sekolah::where('provinsi_id', $provinsiId)->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '<div class="btn-list">';
-                    $btn .= '<a href="' . route('penyisihan.provinsi.sekolah.peserta.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Peserta</a>';
-                    $btn .= '<a href="' . route('penyisihan.provinsi.sekolah.pendamping.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Pendamping</a>';
-                    $btn .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
-                    $btn .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
-                    $btn .= '</div>';
+                ->addColumn('point_per_sesi', function ($row) {
+                    $sesi1 = $row->points->where('sesi', 1)->sum('point');
+                    $sesi2 = $row->points->where('sesi', 2)->sum('point');
+                    $sesi3 = $row->points->where('sesi', 3)->sum('point');
 
-                    return $btn;
+                    $html = '<div>';
+                    $html .= '<div>Sesi 1 : ' . $sesi1 . '</div>';
+                    $html .= '<div>Sesi 2 : ' . $sesi2 . '</div>';
+                    $html .= '<div>Sesi 3 : ' . $sesi3 . '</div>';
+                    $html .= '</div>';
+
+                    return $html;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('point', function ($row) {
+                    return $row->points->sum('point');
+                })
+                ->addColumn('berat_point', function ($row) {
+                    return $row->points->sum('berat_point');
+                })
+                ->addColumn('action', function ($row) {
+                    $html = '<div class="btn-list">';
+                    $html .= '<a href="' . route('penyisihan.provinsi.sekolah.peserta.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Peserta</a>';
+                    $html .= '<a href="' . route('penyisihan.provinsi.sekolah.pendamping.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Pendamping</a>';
+                    $html .= '<button class="btn btn-primary setGroup" data-id="' . $row->id . '">Set Group</button>';
+                    $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
+                    $html .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
+                    $html .= '</div>';
+
+                    return $html;
+                })
+                ->rawColumns(['point_per_sesi', 'action'])
                 ->make(true);
         }
 
@@ -92,6 +112,24 @@ class SekolahController extends Controller
             }
     
             return response()->json(['success' => true]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
+    }
+
+    public function setGroup($provinsiId, $id) {
+        try {
+            $sekolah = Sekolah::where('provinsi_id', $provinsiId)->find($id);
+
+            $sekolahCount = Sekolah::where('provinsi_id', $provinsiId)->whereNotNull('group')->count();
+
+            $sekolah->update([
+                'group' => floor($sekolahCount / 3) + 1,
+            ]);
+
+            return response()->json([
+                'message' => "$sekolah->nama_sekolah set Group $sekolah->group."
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
