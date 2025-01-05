@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Penyisihan;
 
+use App\Http\Controllers\Controller;
 use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -14,9 +15,11 @@ class ProvinsiController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('penyisihan.provinsi.sekolah.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sekolah</a>';
-                    $btn .= ' <button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
-                    $btn .= ' <button class="btn btn-danger delete" data-id="' . $row->id . '">Delete</button>';
+                    $btn = '<div class="btn-list">';
+                    $btn .= '<a href="' . route('penyisihan.provinsi.sekolah.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sekolah</a>';
+                    $btn .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
+                    $btn .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
+                    $btn .= '</div>';
 
                     return $btn;
                 })
@@ -51,6 +54,7 @@ class ProvinsiController extends Controller
 
     public function show($id) {
         $provinsi = Provinsi::find($id);
+        
         return response()->json($provinsi);
     }
 

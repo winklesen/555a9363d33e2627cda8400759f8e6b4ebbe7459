@@ -17,6 +17,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        dd($request);
+
         $credentials = array(
             'email' => $request['email'],
             'password' => $request['password'],

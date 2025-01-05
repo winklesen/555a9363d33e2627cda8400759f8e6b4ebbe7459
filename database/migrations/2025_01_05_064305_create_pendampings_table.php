@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('pendampings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sekolah_id');
-            $table->foreign('sekolah_id')->references('id')->on('sekolahs')->onDelete('cascade');
             $table->string('nama_pendamping');
             $table->timestamps();
         });

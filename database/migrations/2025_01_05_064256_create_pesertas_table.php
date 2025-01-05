@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('pesertas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sekolah_id');
-            $table->foreign('sekolah_id')->references('id')->on('sekolahs')->onDelete('cascade');
             $table->string('nomor_peserta');
             $table->string('nama_peserta');
             $table->timestamps();
