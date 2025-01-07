@@ -14,9 +14,14 @@ return new class extends Migration
         Schema::create('points', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sekolah_id');
-            $table->string('sesi');
-            $table->string('point');
-            $table->string('berat_point');
+            $table->string('group');
+            $table->string('point_sesi_satu');
+            $table->string('point_sesi_dua');
+            $table->string('point_sesi_tiga');
+            $table->string('bobot_point_sesi_satu');
+            $table->string('bobot_point_sesi_dua');
+            $table->string('bobot_point_sesi_tiga');
+            $table->string('babak');
             $table->timestamps();
         });
     }

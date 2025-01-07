@@ -11,25 +11,27 @@ class PointController extends Controller
         try {
             $request->validate([
                 'sekolah_id' => 'required',
-                'sesi' => 'required',
-                'point' => 'required',
+                'group' => 'required',
+                'point_sesi_satu' => 'required',
+                'point_sesi_dua' => 'required',
+                'point_sesi_tiga' => 'required',
+                'babak' => 'required',
             ]);
 
-            $beratPoint = 0;
-
-            if ($request['sesi'] == 1) {
-                $beratPoint = $request['point'] * 0.2;
-            } elseif ($request['sesi'] == 2) {
-                $beratPoint = $request['point'] * 0.3;
-            } elseif ($request['sesi'] == 3) {
-                $beratPoint = $request['point'] * 0.5;
-            }
+            $bobotPointSesiSatu = $request['point_sesi_satu'] * 0.2;
+            $bobotPointSesiDua = $request['point_sesi_dua'] * 0.3;
+            $bobotPointSesiTiga = $request['point_sesi_tiga'] * 0.5;
 
             Point::create([
                 'sekolah_id' => $request['sekolah_id'],
-                'sesi' => $request['sesi'],
-                'point' => $request['point'],
-                'berat_point' => $beratPoint,
+                'babak' => $request['babak'],
+                'group' => $request['group'],
+                'point_sesi_satu' => $request['point_sesi_satu'],
+                'point_sesi_dua' => $request['point_sesi_dua'],
+                'point_sesi_tiga' => $request['point_sesi_tiga'],
+                'bobot_point_sesi_satu' => $bobotPointSesiSatu,
+                'bobot_point_sesi_dua' => $bobotPointSesiDua,
+                'bobot_point_sesi_tiga' => $bobotPointSesiTiga,
             ]);
     
             return response()->json(['success' => true]);

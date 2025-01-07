@@ -134,6 +134,10 @@
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
+
+        setInterval(function () {
+          $('#DataTable').DataTable().ajax.reload(null, false);
+        }, 3000);
     });
 
     $('#createForm').on('submit', function (e) {

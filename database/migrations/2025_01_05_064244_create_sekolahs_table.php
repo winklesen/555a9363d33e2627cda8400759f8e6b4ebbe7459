@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('provinsi_id');
             $table->string('nama_sekolah');
-            $table->string('group')->nullable();
             $table->timestamps();
         });
     }
