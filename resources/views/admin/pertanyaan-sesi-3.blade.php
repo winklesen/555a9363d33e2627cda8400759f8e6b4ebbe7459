@@ -1,17 +1,19 @@
 @extends('templates.templates')
-@section('title', 'Pendamping')
+@section('title', 'Pertanyaan')
 @section('sidebar')
-@include('templates.subtemplates.penyisihan.sidebar')
+@include('templates.subtemplates.sidebar')
 @endsection
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
     <div class="col">
-      <h2 class="page-title">Provinsi {{ $sekolah->provinsi->nama_provinsi }} / Sekolah {{ $sekolah->nama_sekolah }} / Pendamping</h2>
+      <h2 class="page-title">Provinsi : {{ $provinsi->nama_provinsi }} / Sesi 3 / Pertanyaan</h2>
     </div>
     <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
-        <a href="{{ route('penyisihan.provinsi.sekolah.index', ['provinsiId' => $sekolah->provinsi->id]) }}" class="btn btn-primary">Kembali</a>
+        @if(empty(auth()->user()->provinsi_id))
+          <a href="{{ route('admin.provinsi.index', ['provinsiId' => $provinsi->id]) }}" class="btn btn-primary">Kembali</a>
+        @endif
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tambah</button>
       </div>
     </div>
@@ -29,7 +31,8 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Nama Pendamping</th>
+                <th>Pertanyaan</th>
+                <th>Jawaban</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -53,9 +56,13 @@
       <form id="createForm">
         @csrf
         <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label required">Pertanyaan</label>
+            <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
+          </div>
           <div class="">
-            <label class="form-label required">Nama Pendamping</label>
-            <input type="text" class="form-control" name="nama_pendamping" placeholder="Nama Pendamping" required>
+            <label class="form-label required">Jawaban</label>
+            <textarea class="form-control" name="jawaban" rows="5" placeholder="Jawaban" required></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -78,9 +85,13 @@
         @csrf
         @method('PUT')
         <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label required">Pertanyaan</label>
+            <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
+          </div>
           <div class="">
-            <label class="form-label required">Nama Pendamping</label>
-            <input type="text" class="form-control" name="nama_pendamping" placeholder="Nama Pendamping" required>
+            <label class="form-label required">Jawaban</label>
+            <textarea class="form-control" name="jawaban" rows="5" placeholder="Jawaban" required></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -94,8 +105,7 @@
 @endsection
 @push('scripts')
   <script>
-    var provinsiId = '{{ $sekolah->provinsi->id }}';
-    var sekolahId = '{{ $sekolah->id }}';
+    var provinsiId = '{{ $provinsi->id }}';
     
     $(document).ready(function () {
 
@@ -105,10 +115,9 @@
             paging: true,
             searching: true,
             ajax: {
-              url: "{{ route('penyisihan.provinsi.sekolah.pendamping.index', ['provinsiId' => ':provinsiId', 'sekolahId' => ':sekolahId']) }}".replace(':provinsiId', provinsiId).replace(':sekolahId', sekolahId),
+              url: "{{ route('admin.provinsi.sesi-3.pertanyaan.index', ['provinsiId' => ':provinsiId']) }}".replace(':provinsiId', provinsiId),
               data: function (d) {
                 d.provinsiId = provinsiId;
-                d.sekolahId = sekolahId;
               }
             },
             columns: [
@@ -120,14 +129,15 @@
                     return meta.row + 1;
                   }
                 },
-                { data: 'nama_pendamping', name: 'nama_pendamping' },
+                { data: 'pertanyaan', name: 'pertanyaan' },
+                { data: 'jawaban', name: 'jawaban' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
 
         setInterval(function () {
           $('#DataTable').DataTable().ajax.reload(null, false);
-        }, 3000);
+        }, 5000);
     });
 
     $('#createForm').on('submit', function (e) {
@@ -137,7 +147,7 @@
         var formData = $(this).serialize();
 
         $.ajax({
-            url: "{{ route('penyisihan.provinsi.sekolah.pendamping.store', [':provinsiId', ':sekolahId']) }}".replace(':provinsiId', provinsiId).replace(':sekolahId', sekolahId),
+            url: "{{ route('admin.provinsi.sesi-3.pertanyaan.store', ':provinsiId') }}".replace(':provinsiId', provinsiId),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -182,12 +192,13 @@
       $.LoadingOverlay("show");
       
       const id = $(this).data('id');
+      console.log(provinsiId, id)
       $.ajax({
-        url: "{{ route('penyisihan.provinsi.sekolah.pendamping.show', [':provinsiId', ':sekolahId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':sekolahId', sekolahId).replace(':id', id),
+        url: "{{ route('admin.provinsi.sesi-3.pertanyaan.show', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
         method: 'GET',
         success: function (data) {
-          console.log(data)
-          $('#editForm [name="nama_pendamping"]').val(data.nama_pendamping);
+          $('#editForm [name="pertanyaan"]').val(data.pertanyaan);
+          $('#editForm [name="jawaban"]').val(data.jawaban);
           $('#editForm').attr('data-id', id);
           $('#editModal').modal('show');
           $.LoadingOverlay("hide");
@@ -206,7 +217,7 @@
         $('#editForm .text-danger').remove();
 
         $.ajax({
-            url: "{{ route('penyisihan.provinsi.sekolah.pendamping.update', [':provinsiId', ':sekolahId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':sekolahId', sekolahId).replace(':id', id),
+            url: "{{ route('admin.provinsi.sesi-3.pertanyaan.update', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
             method: "PUT",
             data: formData,
             success: function (response) {
@@ -249,7 +260,7 @@
 
     $(document).on('click', '.delete', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('penyisihan.provinsi.sekolah.pendamping.destroy', [':provinsiId', ':sekolahId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':sekolahId', sekolahId).replace(':id', id);
+        var deleteUrl = "{{ route('admin.provinsi.sesi-3.pertanyaan.destroy', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id);
 
         Swal.fire({
             title: 'Apakah Anda yakin?',

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Penyisihan;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+
 use App\Models\Point;
 
 class DashboardController extends Controller
 {
     public function dashboard() {
-        return view('penyisihan.dashboard');
+        return view('admin.dashboard');
     }
 }

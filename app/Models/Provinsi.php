@@ -15,7 +15,15 @@ class Provinsi extends Model
 
     protected $guarded = [];
 
+    public function user() {
+        return $this->hasOne(User::class);
+    }
+
     public function sekolahs() {
         return $this->hasMany(Sekolah::class);
+    }
+
+    public function temas() {
+        return $this->hasMany(Tema::class);
     }
 }

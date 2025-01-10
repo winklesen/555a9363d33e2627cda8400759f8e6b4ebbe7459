@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +26,7 @@ class LoginController extends Controller
 
         if (Auth::guard('web')->attempt($credentials)) {
             if (Auth::user()->status == 1) {
-                return redirect()->route('penyisihan.dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             Auth::guard('web')->logout();
@@ -39,5 +41,28 @@ class LoginController extends Controller
         Auth::guard('web')->logout();
 
         return redirect()->route('login');
+    }
+
+    public function provinsi() {
+        $user = Auth::user();
+        $provinsis = Provinsi::all();
+
+        return response()->json([
+            'user' => $user,
+            'provinsis' => $provinsis,
+        ]);
+    }
+
+    public function updateProvinsi(Request $request) {
+        try {
+            $user = User::find(Auth::user()->id);
+            $user->update([
+                'provinsi_id' => $request['provinsi_id'],
+            ]);
+    
+            return response()->json(['success' => true]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
     }
 }

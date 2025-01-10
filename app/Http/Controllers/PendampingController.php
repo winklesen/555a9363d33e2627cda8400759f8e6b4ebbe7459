@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Penyisihan;
+namespace App\Http\Controllers;
 
-use App\Models\Peserta;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Sekolah;
+use App\Models\Pendamping;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class PesertaController extends Controller
+class PendampingController extends Controller
 {
     public function index(Request $request, $provinsiId, $sekolahId) {
         if ($request->ajax()) {
-            $data = Peserta::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC');
+            $data = Pendamping::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -28,11 +27,11 @@ class PesertaController extends Controller
         }
 
         $sekolah = Sekolah::find($sekolahId);
-        $pesertas = Peserta::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC')->get();
+        $pendampings = Pendamping::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC')->get();
     
-        return view('penyisihan.peserta', compact(
+        return view('admin.pendamping', compact(
             'sekolah',
-            'pesertas',
+            'pendampings',
         ));
     }
 
@@ -41,14 +40,12 @@ class PesertaController extends Controller
     public function store(Request $request, $provinsiId, $sekolahId) {
         try {
             $request->validate([
-                'nomor_peserta' => 'required|numeric',
-                'nama_peserta' => 'required',
+                'nama_pendamping' => 'required',
             ]);
 
-            Peserta::create([
+            Pendamping::create([
                 'sekolah_id' => $sekolahId,
-                'nomor_peserta' => $request['nomor_peserta'],
-                'nama_peserta' => $request['nama_peserta'],
+                'nama_pendamping' => $request['nama_pendamping'],
             ]);
     
             return response()->json(['success' => true]);
@@ -58,25 +55,23 @@ class PesertaController extends Controller
     }
 
     public function show($provinsiId, $sekolahId, $id) {
-        $peserta = Peserta::find($id);
+        $pendamping = Pendamping::find($id);
 
-        return response()->json($peserta);
+        return response()->json($pendamping);
     }
 
     public function edit($provinsiId, $sekolahId, $id) {}
 
     public function update(Request $request, $provinsiId, $sekolahId, $id) {
         try {
-            $peserta = Peserta::find($id);
+            $pendamping = Pendamping::find($id);
 
             $request->validate([
-                'nomor_peserta' => 'required|numeric',
-                'nama_peserta' => 'required',
+                'nama_pendamping' => 'required',
             ]);
 
-            $peserta->update([
-                'nomor_peserta' => $request['nomor_peserta'],
-                'nama_peserta' => $request['nama_peserta'],
+            $pendamping->update([
+                'nama_pendamping' => $request['nama_pendamping'],
             ]);
     
             return response()->json(['success' => true]);
@@ -87,10 +82,10 @@ class PesertaController extends Controller
 
     public function destroy($provinsiId, $sekolahId, $id) {
         try {
-            $peserta = Peserta::find($id);
+            $pendamping = Pendamping::find($id);
 
-            if ($peserta) {
-                $peserta->delete();
+            if ($pendamping) {
+                $pendamping->delete();
             }
     
             return response()->json(['success' => true]);

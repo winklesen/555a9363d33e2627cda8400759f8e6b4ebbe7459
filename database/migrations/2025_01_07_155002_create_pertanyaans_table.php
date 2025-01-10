@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('pertanyaans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sekolah_id');
-            $table->string('point')->nullable();
+            $table->unsignedBigInteger('tema_id')->nullable();
+            $table->string('pertanyaan');
+            $table->string('sisi')->nullable();
+            $table->integer('sesi');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('points');
+        Schema::dropIfExists('pertanyaans');
     }
 };

@@ -1,7 +1,7 @@
 @extends('templates.templates')
 @section('title', 'Dashboard')
 @section('sidebar')
-@include('templates.subtemplates.penyisihan.sidebar')
+@include('templates.subtemplates.sidebar')
 @endsection
 @section('header')
 <div class="container-xl">

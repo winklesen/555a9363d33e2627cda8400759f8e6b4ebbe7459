@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Penyisihan;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,7 +15,10 @@ class ProvinsiController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-list">';
-                    $html .= '<a href="' . route('penyisihan.provinsi.sekolah.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sekolah</a>';
+                    $html .= '<a href="' . route('admin.provinsi.sesi-1.tema.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 1</a>';
+                    $html .= '<a href="' . route('admin.provinsi.sesi-2.pertanyaan.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 2</a>';
+                    $html .= '<a href="' . route('admin.provinsi.sesi-3.pertanyaan.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 3</a>';
+                    $html .= '<a href="' . route('admin.provinsi.sekolah.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sekolah</a>';
                     $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
                     $html .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
                     $html .= '</div>';
@@ -29,7 +31,7 @@ class ProvinsiController extends Controller
 
         $provinsis = Provinsi::orderBy('created_at', 'DESC')->get();
     
-        return view('penyisihan.provinsi', compact(
+        return view('admin.provinsi', compact(
             'provinsis',
         ));
     }

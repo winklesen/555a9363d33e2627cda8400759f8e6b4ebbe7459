@@ -24,208 +24,43 @@
 <body>
   <script>
     const data = {
-      name: "Prov 1",
-      info: "Champion",
-      children: [
-        {
-          name: "Prov 1",
-          info: "Grand Final",
-          children: [
-            {
-              name: "Prov 1",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 1",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 1", info: "Penyisihan" },
-                    { name: "Prov 2", info: "Penyisihan" },
-                    { name: "Prov 3", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 4",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 4", info: "Penyisihan" },
-                    { name: "Prov 5", info: "Penyisihan" },
-                    { name: "Prov 6", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 7",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 7", info: "Penyisihan" },
-                    { name: "Prov 8", info: "Penyisihan" },
-                    { name: "Prov 9", info: "Penyisihan" }
-                  ]
-                }
-              ]
-            },
-            {
-              name: "Prov 10",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 10",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 10", info: "Penyisihan" },
-                    { name: "Prov 11", info: "Penyisihan" },
-                    { name: "Prov 12", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 13",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 13", info: "Penyisihan" },
-                    { name: "Prov 14", info: "Penyisihan" },
-                    { name: "Prov 15", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 16",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 16", info: "Penyisihan" },
-                    { name: "Prov 17", info: "Penyisihan" },
-                    { name: "Prov 18", info: "Penyisihan" }
-                  ]
-                }
-              ]
-            },
-            {
-              name: "Prov 19",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 19",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 19", info: "Penyisihan" },
-                    { name: "R 1 (Prov 2)", info: "Penyisihan" },
-                    { name: "R 2 (Prov 3)", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "R 5 (Prov 4)",
-                  info: "Point 100 Bobot 50"
-                },
-                {
-                  name: "R 6 (Prov 7)",
-                  info: "Point 100 Bobot 50"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: "Prov 20",
-          info: "Grand Final",
-          children: [
-            {
-              name: "Prov 20",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 20",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 20", info: "Penyisihan" },
-                    { name: "Prov 21", info: "Penyisihan" },
-                    { name: "Prov 22", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 23",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 23", info: "Penyisihan" },
-                    { name: "Prov 24", info: "Penyisihan" },
-                    { name: "Prov 25", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 26",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 26", info: "Penyisihan" },
-                    { name: "Prov 27", info: "Penyisihan" },
-                    { name: "Prov 28", info: "Penyisihan" }
-                  ]
-                }
-              ]
-            },
-            {
-              name: "Prov 32",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 29",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 29", info: "Penyisihan" },
-                    { name: "Prov 30", info: "Penyisihan" },
-                    { name: "Prov 31", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 32",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 32", info: "Penyisihan" },
-                    { name: "Prov 33", info: "Penyisihan" },
-                    { name: "Prov 34", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "Prov 35",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 35", info: "Penyisihan" },
-                    { name: "Prov 36", info: "Penyisihan" },
-                    { name: "Prov 37", info: "Penyisihan" }
-                  ]
-                }
-              ]
-            },
-            {
-              name: "Prov 38",
-              info: "Final",
-              children: [
-                {
-                  name: "Prov 38",
-                  info: "Semi Final",
-                  children: [
-                    { name: "Prov 38", info: "Penyisihan" },
-                    { name: "R 3 (Prov 20)", info: "Penyisihan" },
-                    { name: "R 4 (Prov 21)", info: "Penyisihan" }
-                  ]
-                },
-                {
-                  name: "R 7 (Prov 23)",
-                  info: "Semi Final"
-                },
-                {
-                  name: "R 8 (Prov 26)",
-                  info: "Semi Final"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: "R 9 (Prov 38)",
-          info: "Final"
-        }
-      ]
+      name: "Final Sekolah 1",
+        info: "Point : (point) / Bobot : (bobot_point)",
+        children: [
+          {
+            name: "Semi Final Sekolah 1",
+            info: "Point : (point) / Bobot : (bobot_point)",
+            children: [
+              { name: "Penyisihan Sekolah 1", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 2", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 3", info: "Point : (point) / Bobot : (bobot_point)" }
+            ]
+          },
+          {
+            name: "Semi Final Sekolah 5",
+            info: "Point : (point) / Bobot : (bobot_point)",
+            children: [
+              { name: "Penyisihan Sekolah 4", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 5", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 6", info: "Point : (point) / Bobot : (bobot_point)" }
+            ]
+          },
+          {
+            name: "Semi Final Sekolah 9",
+            info: "Point : (point) / Bobot : (bobot_point)",
+            children: [
+              { name: "Penyisihan Sekolah 7", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 8", info: "Point : (point) / Bobot : (bobot_point)" },
+              { name: "Penyisihan Sekolah 9", info: "Point : (point) / Bobot : (bobot_point)" }
+            ]
+          }
+        ]
     };
 
-    const width = 4000;
-    const height = 2500;
+    // const data = @json($data);
+
+    const width = 1000;
+    const height = 700;
 
     const svg = d3.select("body")
       .append("svg")

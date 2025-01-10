@@ -11,11 +11,10 @@ class PointController extends Controller
         try {
             $request->validate([
                 'sekolah_id' => 'required',
-                'group' => 'required',
+                'game_id' => 'required',
                 'point_sesi_satu' => 'required',
                 'point_sesi_dua' => 'required',
                 'point_sesi_tiga' => 'required',
-                'babak' => 'required',
             ]);
 
             $bobotPointSesiSatu = $request['point_sesi_satu'] * 0.2;
@@ -24,8 +23,7 @@ class PointController extends Controller
 
             Point::create([
                 'sekolah_id' => $request['sekolah_id'],
-                'babak' => $request['babak'],
-                'group' => $request['group'],
+                'game_id' => $request['game_id'],
                 'point_sesi_satu' => $request['point_sesi_satu'],
                 'point_sesi_dua' => $request['point_sesi_dua'],
                 'point_sesi_tiga' => $request['point_sesi_tiga'],
