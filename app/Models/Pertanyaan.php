@@ -12,6 +12,10 @@ class Pertanyaan extends Model
 
     protected $guarded = [];
 
+    public function provinsi() {
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
+    }
+
     public function tema() {
         return $this->belongsTo(Tema::class, 'tema_id');
     }

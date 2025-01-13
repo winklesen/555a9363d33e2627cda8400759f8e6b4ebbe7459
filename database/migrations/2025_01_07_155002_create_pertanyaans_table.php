@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('pertanyaans', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('provinsi_id');
             $table->unsignedBigInteger('tema_id')->nullable();
             $table->string('pertanyaan');
             $table->string('sisi')->nullable();
             $table->integer('sesi');
+            $table->integer('status_aktif')->default(1);
             $table->integer('status')->default(1);
             $table->timestamps();
         });

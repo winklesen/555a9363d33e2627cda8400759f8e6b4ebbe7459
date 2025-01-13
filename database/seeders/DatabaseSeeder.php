@@ -26,7 +26,10 @@ class DatabaseSeeder extends Seeder
 
         $provinsis = [
             [
-                'nama_provinsi' => 'DKI Jakarta',
+                'nama_provinsi' => 'Jawa Tengah',
+                'nama_kota' => 'Semarang',
+                'tanggal_mulai' => '2025-02-14',
+                'tanggal_selesai' => '2025-02-16',
                 'created_at' => now(),
             ],
         ];

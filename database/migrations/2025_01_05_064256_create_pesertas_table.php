@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sekolah_id');
             $table->string('nomor_peserta');
             $table->string('nama_peserta');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

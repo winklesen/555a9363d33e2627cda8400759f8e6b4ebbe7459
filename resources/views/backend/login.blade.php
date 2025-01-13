@@ -1,6 +1,6 @@
-@extends('templates.login')
+@extends('backend.templates.authentications')
 @section('title', 'Login')
-@section('pages')
+@section('content')
 <div class="container container-tight py-4">
   <div class="text-center mb-4">
     <a href="{{ route('index') }}" class="navbar-brand navbar-brand-autodark">
@@ -10,9 +10,14 @@
   <div class="card">
     <div class="card-body">
       <h2 class="h2 text-center mb-4">Login</h2>
-      @include('alert')
-      <form action="{{ route('post.login') }}" method="post">
+      
+      <form action="{{ route('post-login') }}" method="post">
         @csrf
+        @if(Session::get('error'))
+          <div class="alert alert-important alert-danger" role="alert">
+            {{ Session::get('error') }}
+          </div>
+        @endif
         <div class="mb-3">
           <label class="form-label required">Email</label>
           <input type="email" class="form-control" name="email" placeholder="Email">

@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('provinsis', function (Blueprint $table) {
             $table->id();
             $table->string('nama_provinsi');
+            $table->string('nama_kota')->nullable();
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

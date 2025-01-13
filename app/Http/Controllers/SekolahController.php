@@ -9,15 +9,23 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SekolahController extends Controller
 {
-    public function index(Request $request, $provinsiId) {
+    public function index(Request $request) {
         if ($request->ajax()) {
-            $data = Sekolah::where('provinsi_id', $provinsiId)->orderBy('created_at', 'DESC');
+            $data = Sekolah::where('status', 1);
+
+            if ($request->provinsi_id) {
+                $data->where('provinsi_id', $request->provinsi_id);
+            }
+
+            $data = $data->orderBy('created_at', 'DESC');
+
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('provinsi', function ($row) {
+                    return $row->provinsi->nama_provinsi;
+                })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-list">';
-                    $html .= '<a href="' . route('admin.provinsi.sekolah.peserta.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Peserta</a>';
-                    $html .= '<a href="' . route('admin.provinsi.sekolah.pendamping.index', ['provinsiId' => $row->provinsi->id, 'sekolahId' => $row->id]) . '" class="btn btn-success">Pendamping</a>';
                     $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
                     $html .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
                     $html .= '</div>';
@@ -28,25 +36,26 @@ class SekolahController extends Controller
                 ->make(true);
         }
 
-        $provinsi = Provinsi::find($provinsiId);
-        $sekolahs = Sekolah::where('provinsi_id', $provinsiId)->orderBy('created_at', 'DESC')->get();
+        $provinsis = Provinsi::where('status', 1)->get();
+        $sekolahs = Sekolah::where('status', 1)->orderBy('created_at', 'DESC')->get();
     
-        return view('admin.sekolah', compact(
-            'provinsi',
+        return view('backend.sekolah', compact(
+            'provinsis',
             'sekolahs',
         ));
     }
 
-    public function create($provinsiId) {}
+    public function create() {}
 
-    public function store(Request $request, $provinsiId) {
+    public function store(Request $request) {
         try {
             $request->validate([
+                'provinsi_id' => 'required',
                 'nama_sekolah' => 'required',
             ]);
 
             Sekolah::create([
-                'provinsi_id' => $provinsiId,
+                'provinsi_id' => $request['provinsi_id'],
                 'nama_sekolah' => $request['nama_sekolah'],
             ]);
     
@@ -56,23 +65,25 @@ class SekolahController extends Controller
         }
     }
 
-    public function show($provinsiId, $id) {
+    public function show($id) {
         $sekolah = Sekolah::find($id);
         
         return response()->json($sekolah);
     }
 
-    public function edit($provinsiId, $id) {}
+    public function edit($id) {}
 
-    public function update(Request $request, $provinsiId, $id) {
+    public function update(Request $request, $id) {
         try {
             $sekolah = Sekolah::find($id);
 
             $request->validate([
+                'provinsi_id' => 'required',
                 'nama_sekolah' => 'required',
             ]);
 
             $sekolah->update([
+                'provinsi_id' => $request['provinsi_id'],
                 'nama_sekolah' => $request['nama_sekolah'],
             ]);
     
@@ -82,12 +93,14 @@ class SekolahController extends Controller
         }
     }
 
-    public function destroy($provinsiId, $id) {
+    public function destroy($id) {
         try {
             $sekolah = Sekolah::find($id);
 
             if ($sekolah) {
-                $sekolah->delete();
+                $sekolah->update([
+                    'status' => 0,
+                ]);
             }
     
             return response()->json(['success' => true]);

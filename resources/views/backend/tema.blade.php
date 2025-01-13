@@ -1,37 +1,51 @@
-@extends('templates.templates')
+@extends('backend.templates.pages')
 @section('title', 'Tema')
-@section('sidebar')
-@include('templates.subtemplates.sidebar')
-@endsection
+
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
     <div class="col">
-      <h2 class="page-title">Provinsi : {{ $provinsi->nama_provinsi }} / Sesi 1 / Tema</h2>
+      <h2 class="page-title">Tema</h2>
     </div>
     <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
-        @if(empty(auth()->user()->provinsi_id))
-          <a href="{{ route('admin.provinsi.index') }}" class="btn btn-primary">Kembali</a>
-        @endif
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tambah</button>
       </div>
     </div>
   </div>
 </div>
 @endsection
-@section('pages')
+@section('content')
 <div class="container-xl">
+  <div class="row g-2 mb-2">
+    <div class="col-3">
+      <select id="filterProvinsi" class="form-select select2">
+        <option value="">Semua</option>
+        @foreach($provinsis as $provinsi)
+          <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+        @endforeach
+      </select>
+    </div>
+    <div class="col-3">
+      <select id="filterSesi" class="form-select select2">
+        <option value="">Semua</option>
+        <option value="1">Sesi 1</option>
+        <option value="2">Sesi 2</option>
+      </select>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
-      @include('alert')
       <div class="card">
         <div class="table-responsive p-3">
           <table id="DataTable" class="table table-vcenter card-table table-striped">
             <thead>
               <tr>
                 <th>No.</th>
+                <th>Provinsi</th>
                 <th>Tema</th>
+                <th>Sesi</th>
+                <th>Status Aktif</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -56,8 +70,25 @@
         @csrf
         <div class="modal-body">
           <div class="">
+            <label class="form-label required">Provinsi</label>
+            <select class="form-select select2" name="provinsi_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($provinsis as $provinsi)
+                <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
             <label class="form-label required">Tema</label>
-            <textarea class="form-control" name="tema" rows="5" placeholder="Tema" required></textarea>
+            <input type="text" class="form-control" name="tema" placeholder="Tema" required>
+          </div>
+          <div class="mt-3">
+            <div class="form-label required">Sesi</div>
+            <select class="form-select" name="sesi" required>
+              <option disabled selected value="">Pilih</option>
+              <option value="1">Sesi 1</option>
+              <option value="2">Sesi 2</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -81,8 +112,33 @@
         @method('PUT')
         <div class="modal-body">
           <div class="">
+            <label class="form-label required">Provinsi</label>
+            <select class="form-select select2" name="provinsi_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($provinsis as $provinsi)
+                <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
             <label class="form-label required">Tema</label>
-            <textarea class="form-control" name="tema" rows="5" placeholder="Tema" required></textarea>
+            <input type="text" class="form-control" name="tema" placeholder="Tema" required>
+          </div>
+          <div class="mt-3">
+            <div class="form-label required">Sesi</div>
+            <select class="form-select" name="sesi" required>
+              <option disabled selected value="">Pilih</option>
+              <option value="1">Sesi 1</option>
+              <option value="2">Sesi 2</option>
+            </select>
+          </div>
+          <div class="mt-3">
+            <div class="form-label required">Status Aktif</div>
+            <select class="form-select" name="status_aktif" required>
+              <option disabled selected value="">Pilih</option>
+              <option value="1">Aktif</option>
+              <option value="0">Tidak Aktif</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -96,19 +152,17 @@
 @endsection
 @push('scripts')
   <script>
-    var provinsiId = '{{ $provinsi->id }}';
-    
-    $(document).ready(function () {
-
+    $(document).ready(function () {        
         $('#DataTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
             searching: true,
             ajax: {
-              url: "{{ route('admin.provinsi.sesi-1.tema.index', ['provinsiId' => ':provinsiId']) }}".replace(':provinsiId', provinsiId),
+              url: "{{ route('admin.tema.index') }}",
               data: function (d) {
-                d.provinsiId = provinsiId;
+                  d.provinsi_id = $('#filterProvinsi').val();
+                  d.sesi = $('#filterSesi').val();
               }
             },
             columns: [
@@ -120,14 +174,21 @@
                     return meta.row + 1;
                   }
                 },
+                { data: 'provinsi', name: 'provinsi', searchable: false },
                 { data: 'tema', name: 'tema' },
+                { data: 'sesi', name: 'sesi' },
+                { data: 'status_aktif', name: 'status_aktif', searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
 
-        setInterval(function () {
-          $('#DataTable').DataTable().ajax.reload(null, false);
-        }, 5000);
+        $('#filterProvinsi').change(function () {
+            $('#DataTable').DataTable().ajax.reload(null, false);
+        });
+
+        $('#filterSesi').change(function () {
+            $('#DataTable').DataTable().ajax.reload(null, false);
+        });
     });
 
     $('#createForm').on('submit', function (e) {
@@ -137,7 +198,7 @@
         var formData = $(this).serialize();
 
         $.ajax({
-            url: "{{ route('admin.provinsi.sesi-1.tema.store', ':provinsiId') }}".replace(':provinsiId', provinsiId),
+            url: "{{ route('admin.tema.store') }}",
             method: "POST",
             data: formData,
             success: function (response) {
@@ -182,12 +243,33 @@
       $.LoadingOverlay("show");
       
       const id = $(this).data('id');
-      console.log(provinsiId, id)
+
       $.ajax({
-        url: "{{ route('admin.provinsi.sesi-1.tema.show', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+        url: "{{ route('admin.tema.show', [':id']) }}".replace(':id', id),
         method: 'GET',
         success: function (data) {
+          $('#editForm [name="provinsi_id"] option').each(function () {
+            if ($(this).val() == data.provinsi_id) {
+              $(this).prop('selected', true);
+            } else {
+              $(this).prop('selected', false);
+            }
+          });
           $('#editForm [name="tema"]').val(data.tema);
+          $('#editForm [name="sesi"] option').each(function () {
+            if ($(this).val() == data.sesi) {
+              $(this).prop('selected', true);
+            } else {
+              $(this).prop('selected', false);
+            }
+          });
+          $('#editForm [name="status_aktif"] option').each(function () {
+            if ($(this).val() == data.status_aktif) {
+              $(this).prop('selected', true);
+            } else {
+              $(this).prop('selected', false);
+            }
+          });
           $('#editForm').attr('data-id', id);
           $('#editModal').modal('show');
           $.LoadingOverlay("hide");
@@ -206,7 +288,7 @@
         $('#editForm .text-danger').remove();
 
         $.ajax({
-            url: "{{ route('admin.provinsi.sesi-1.tema.update', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+            url: "{{ route('admin.tema.update', [':id']) }}".replace(':id', id),
             method: "PUT",
             data: formData,
             success: function (response) {
@@ -249,7 +331,8 @@
 
     $(document).on('click', '.delete', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.provinsi.sesi-1.tema.destroy', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id);
+
+        var url = "{{ route('admin.tema.destroy', [':id']) }}".replace(':id', id);
 
         Swal.fire({
             title: 'Apakah Anda yakin?',
@@ -261,7 +344,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: deleteUrl,
+                    url: url,
                     method: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}',

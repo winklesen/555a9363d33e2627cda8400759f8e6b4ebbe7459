@@ -1,38 +1,42 @@
-@extends('templates.templates')
-@section('title', 'Pertanyaan')
-@section('sidebar')
-@include('templates.subtemplates.sidebar')
-@endsection
+@extends('backend.templates.pages')
+@section('title', 'Sekolah')
+
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
     <div class="col">
-      <h2 class="page-title">Provinsi : {{ $provinsi->nama_provinsi }} / Sesi 3 / Pertanyaan</h2>
+      <h2 class="page-title">Sekolah</h2>
     </div>
     <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
-        @if(empty(auth()->user()->provinsi_id))
-          <a href="{{ route('admin.provinsi.index', ['provinsiId' => $provinsi->id]) }}" class="btn btn-primary">Kembali</a>
-        @endif
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tambah</button>
       </div>
     </div>
   </div>
 </div>
 @endsection
-@section('pages')
+@section('content')
 <div class="container-xl">
+  <div class="row g-2 mb-2">
+    <div class="col-3">
+      <select id="filterProvinsi" class="form-select select2">
+        <option value="">Semua</option>
+        @foreach($provinsis as $provinsi)
+          <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+        @endforeach
+      </select>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
-      @include('alert')
       <div class="card">
         <div class="table-responsive p-3">
           <table id="DataTable" class="table table-vcenter card-table table-striped">
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Pertanyaan</th>
-                <th>Jawaban</th>
+                <th>Provinsi</th>
+                <th>Nama Sekolah</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -56,13 +60,18 @@
       <form id="createForm">
         @csrf
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label required">Pertanyaan</label>
-            <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
-          </div>
           <div class="">
-            <label class="form-label required">Jawaban</label>
-            <textarea class="form-control" name="jawaban" rows="5" placeholder="Jawaban" required></textarea>
+            <label class="form-label required">Provinsi</label>
+            <select class="form-select select2" name="provinsi_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($provinsis as $provinsi)
+                <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Nama Sekolah</label>
+            <input type="text" class="form-control" name="nama_sekolah" placeholder="Nama Sekolah" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -85,13 +94,18 @@
         @csrf
         @method('PUT')
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label required">Pertanyaan</label>
-            <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
-          </div>
           <div class="">
-            <label class="form-label required">Jawaban</label>
-            <textarea class="form-control" name="jawaban" rows="5" placeholder="Jawaban" required></textarea>
+            <label class="form-label required">Provinsi</label>
+            <select class="form-select select2" name="provinsi_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($provinsis as $provinsi)
+                <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Nama Sekolah</label>
+            <input type="text" class="form-control" name="nama_sekolah" placeholder="Nama Sekolah" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -105,19 +119,16 @@
 @endsection
 @push('scripts')
   <script>
-    var provinsiId = '{{ $provinsi->id }}';
-    
-    $(document).ready(function () {
-
+    $(document).ready(function () {        
         $('#DataTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
             searching: true,
             ajax: {
-              url: "{{ route('admin.provinsi.sesi-3.pertanyaan.index', ['provinsiId' => ':provinsiId']) }}".replace(':provinsiId', provinsiId),
+              url: "{{ route('admin.sekolah.index') }}",
               data: function (d) {
-                d.provinsiId = provinsiId;
+                  d.provinsi_id = $('#filterProvinsi').val();
               }
             },
             columns: [
@@ -129,15 +140,15 @@
                     return meta.row + 1;
                   }
                 },
-                { data: 'pertanyaan', name: 'pertanyaan' },
-                { data: 'jawaban', name: 'jawaban' },
+                { data: 'provinsi', name: 'provinsi' },
+                { data: 'nama_sekolah', name: 'nama_sekolah' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
 
-        setInterval(function () {
-          $('#DataTable').DataTable().ajax.reload(null, false);
-        }, 5000);
+        $('#filterProvinsi').change(function () {
+            $('#DataTable').DataTable().ajax.reload(null, false);
+        });
     });
 
     $('#createForm').on('submit', function (e) {
@@ -147,7 +158,7 @@
         var formData = $(this).serialize();
 
         $.ajax({
-            url: "{{ route('admin.provinsi.sesi-3.pertanyaan.store', ':provinsiId') }}".replace(':provinsiId', provinsiId),
+            url: "{{ route('admin.sekolah.store') }}",
             method: "POST",
             data: formData,
             success: function (response) {
@@ -192,13 +203,19 @@
       $.LoadingOverlay("show");
       
       const id = $(this).data('id');
-      console.log(provinsiId, id)
+
       $.ajax({
-        url: "{{ route('admin.provinsi.sesi-3.pertanyaan.show', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+        url: "{{ route('admin.sekolah.show', [':id']) }}".replace(':id', id),
         method: 'GET',
         success: function (data) {
-          $('#editForm [name="pertanyaan"]').val(data.pertanyaan);
-          $('#editForm [name="jawaban"]').val(data.jawaban);
+          $('#editForm [name="provinsi_id"] option').each(function () {
+            if ($(this).val() == data.provinsi_id) {
+              $(this).prop('selected', true);
+            } else {
+              $(this).prop('selected', false);
+            }
+          });
+          $('#editForm [name="nama_sekolah"]').val(data.nama_sekolah);
           $('#editForm').attr('data-id', id);
           $('#editModal').modal('show');
           $.LoadingOverlay("hide");
@@ -217,7 +234,7 @@
         $('#editForm .text-danger').remove();
 
         $.ajax({
-            url: "{{ route('admin.provinsi.sesi-3.pertanyaan.update', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+            url: "{{ route('admin.sekolah.update', [':id']) }}".replace(':id', id),
             method: "PUT",
             data: formData,
             success: function (response) {
@@ -260,7 +277,8 @@
 
     $(document).on('click', '.delete', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.provinsi.sesi-3.pertanyaan.destroy', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id);
+
+        var url = "{{ route('admin.sekolah.destroy', [':id']) }}".replace(':id', id);
 
         Swal.fire({
             title: 'Apakah Anda yakin?',
@@ -272,7 +290,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: deleteUrl,
+                    url: url,
                     method: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}',

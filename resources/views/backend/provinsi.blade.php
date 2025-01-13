@@ -1,35 +1,34 @@
-@extends('templates.templates')
-@section('title', 'Sekolah')
-@section('sidebar')
-@include('templates.subtemplates.sidebar')
-@endsection
+@extends('backend.templates.pages')
+@section('title', 'Provinsi')
+
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
     <div class="col">
-      <h2 class="page-title">Provinsi : {{ $provinsi->nama_provinsi }} / Sekolah</h2>
+      <h2 class="page-title">Provinsi</h2>
     </div>
     <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
-        <a href="{{ route('admin.provinsi.index') }}" class="btn btn-primary">Kembali</a>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tambah</button>
       </div>
     </div>
   </div>
 </div>
 @endsection
-@section('pages')
+@section('content')
 <div class="container-xl">
   <div class="row">
     <div class="col-12">
-      @include('alert')
       <div class="card">
         <div class="table-responsive p-3">
           <table id="DataTable" class="table table-vcenter card-table table-striped">
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Nama Sekolah</th>
+                <th>Nama Provinsi</th>
+                <th>Nama Kota</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -54,8 +53,20 @@
         @csrf
         <div class="modal-body">
           <div class="">
-            <label class="form-label required">Nama Sekolah</label>
-            <input type="text" class="form-control" name="nama_sekolah" placeholder="Nama Sekolah" required>
+            <label class="form-label required">Nama Provinsi</label>
+            <input type="text" class="form-control" name="nama_provinsi" placeholder="Nama Provinsi" required>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Nama Kota</label>
+            <input type="text" class="form-control" name="nama_kota" placeholder="Nama Kota">
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Tanggal Mulai</label>
+            <input type="date" class="form-control" name="tanggal_mulai" placeholder="Tanggal Mulai" required>
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Tanggal Selesai</label>
+            <input type="date" class="form-control" name="tanggal_selesai" placeholder="Tanggal Selesai" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -79,8 +90,20 @@
         @method('PUT')
         <div class="modal-body">
           <div class="">
-            <label class="form-label required">Nama Sekolah</label>
-            <input type="text" class="form-control" name="nama_sekolah" placeholder="Nama Sekolah" required>
+            <label class="form-label required">Nama Provinsi</label>
+            <input type="text" class="form-control" name="nama_provinsi" placeholder="Nama Provinsi">
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Nama Kota</label>
+            <input type="text" class="form-control" name="nama_kota" placeholder="Nama Kota">
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Tanggal Mulai</label>
+            <input type="date" class="form-control" name="tanggal_mulai" placeholder="Tanggal Mulai" required>
+          </div>
+          <div class="mt-3">
+            <label class="form-label required">Tanggal Selesai</label>
+            <input type="date" class="form-control" name="tanggal_selesai" placeholder="Tanggal Selesai" required>
           </div>
         </div>
         <div class="modal-footer">
@@ -94,21 +117,13 @@
 @endsection
 @push('scripts')
   <script>
-    var provinsiId = '{{ $provinsi->id }}';
-    
     $(document).ready(function () {
-
         $('#DataTable').DataTable({
             processing: true,
             serverSide: true,
             paging: true,
             searching: true,
-            ajax: {
-              url: "{{ route('admin.provinsi.sekolah.index', ['provinsiId' => ':provinsiId']) }}".replace(':provinsiId', provinsiId),
-              data: function (d) {
-                d.provinsiId = provinsiId;
-              }
-            },
+            ajax: "{{ route('admin.provinsi.index') }}",
             columns: [
                 {
                   data: null,
@@ -118,74 +133,72 @@
                     return meta.row + 1;
                   }
                 },
-                { data: 'nama_sekolah', name: 'nama_sekolah' },
+                { data: 'nama_provinsi', name: 'nama_provinsi' },
+                { data: 'nama_kota', name: 'nama_kota' },
+                { data: 'tanggal_mulai', name: 'tanggal_mulai' },
+                { data: 'tanggal_selesai', name: 'tanggal_selesai' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
         });
-
-        setInterval(function () {
-          $('#DataTable').DataTable().ajax.reload(null, false);
-        }, 5000);
     });
 
     $('#createForm').on('submit', function (e) {
-        e.preventDefault();
-        $.LoadingOverlay("show");
+      e.preventDefault();
+      $.LoadingOverlay("show");
 
-        var formData = $(this).serialize();
+      var formData = $(this).serialize();
 
-        $.ajax({
-            url: "{{ route('admin.provinsi.sekolah.store', ':provinsiId') }}".replace(':provinsiId', provinsiId),
-            method: "POST",
-            data: formData,
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                    });
-
-                    $('#createModal').modal('hide');
-                    $('#DataTable').DataTable().ajax.reload();
-                    $('#createForm')[0].reset();
-                }
-
-                $.LoadingOverlay("hide");
-            },
-            error: function (xhr) {
-              $.LoadingOverlay("hide");
-
-              if (xhr.status === 422) {
-                  var errors = xhr.responseJSON.errors;
-                  var errorMessage = '';
-                  $.each(errors, function (key, value) {
-                      errorMessage += value[0] + '\n';
-                  });
-
+      $.ajax({
+          url: "{{ route('admin.provinsi.store') }}",
+          method: "POST",
+          data: formData,
+          success: function (response) {
+              if (response.success) {
                   Swal.fire({
-                      icon: 'error',
-                      title: 'Error!',
-                      text: errorMessage,
+                      icon: 'success',
+                      title: 'Success!',
                   });
-              }
-            }
-        });
 
-        setTimeout(function () {
+                  $('#createModal').modal('hide');
+                  $('#DataTable').DataTable().ajax.reload();
+                  $('#createForm')[0].reset();
+              }
+
+              $.LoadingOverlay("hide");
+          },
+          error: function (xhr) {
             $.LoadingOverlay("hide");
-        }, 10000);
+
+            if (xhr.status === 422) {
+                var errors = xhr.responseJSON.errors;
+                var errorMessage = '';
+                $.each(errors, function (key, value) {
+                    errorMessage += value[0] + '\n';
+                });
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMessage,
+                });
+            }
+          }
+      });
+
+      setTimeout(function () {
+          $.LoadingOverlay("hide");
+      }, 10000);
     });
 
     $(document).on('click', '.edit', function () {
       $.LoadingOverlay("show");
       
       const id = $(this).data('id');
-      console.log(provinsiId, id)
       $.ajax({
-        url: "{{ route('admin.provinsi.sekolah.show', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+        url: "{{ route('admin.provinsi.show', ':id') }}".replace(':id', id),
         method: 'GET',
         success: function (data) {
-          $('#editForm [name="nama_sekolah"]').val(data.nama_sekolah);
+          $('#editForm [name="nama_provinsi"]').val(data.nama_provinsi);
           $('#editForm').attr('data-id', id);
           $('#editModal').modal('show');
           $.LoadingOverlay("hide");
@@ -204,7 +217,7 @@
         $('#editForm .text-danger').remove();
 
         $.ajax({
-            url: "{{ route('admin.provinsi.sekolah.update', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id),
+            url: "{{ route('admin.provinsi.update', ':id') }}".replace(':id', id),
             method: "PUT",
             data: formData,
             success: function (response) {
@@ -247,7 +260,7 @@
 
     $(document).on('click', '.delete', function () {
         var id = $(this).data('id');
-        var deleteUrl = "{{ route('admin.provinsi.sekolah.destroy', [':provinsiId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':id', id);
+        var deleteUrl = "{{ route('admin.provinsi.destroy', ':id') }}".replace(':id', id);
 
         Swal.fire({
             title: 'Apakah Anda yakin?',

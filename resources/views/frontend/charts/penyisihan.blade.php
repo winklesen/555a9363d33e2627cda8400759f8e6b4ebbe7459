@@ -25,33 +25,33 @@
   <script>
     const data = {
       name: "Final Sekolah 1",
-        info: "Point : (point) / Bobot : (bobot_point)",
+        info: "Point",
         children: [
           {
             name: "Semi Final Sekolah 1",
-            info: "Point : (point) / Bobot : (bobot_point)",
+            info: "Point",
             children: [
-              { name: "Penyisihan Sekolah 1", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 2", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 3", info: "Point : (point) / Bobot : (bobot_point)" }
+              { name: "Penyisihan Sekolah 1", info: "Point" },
+              { name: "Penyisihan Sekolah 2", info: "Point" },
+              { name: "Penyisihan Sekolah 3", info: "Point" }
             ]
           },
           {
             name: "Semi Final Sekolah 5",
-            info: "Point : (point) / Bobot : (bobot_point)",
+            info: "Point",
             children: [
-              { name: "Penyisihan Sekolah 4", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 5", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 6", info: "Point : (point) / Bobot : (bobot_point)" }
+              { name: "Penyisihan Sekolah 4", info: "Point" },
+              { name: "Penyisihan Sekolah 5", info: "Point" },
+              { name: "Penyisihan Sekolah 6", info: "Point" }
             ]
           },
           {
             name: "Semi Final Sekolah 9",
-            info: "Point : (point) / Bobot : (bobot_point)",
+            info: "Point",
             children: [
-              { name: "Penyisihan Sekolah 7", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 8", info: "Point : (point) / Bobot : (bobot_point)" },
-              { name: "Penyisihan Sekolah 9", info: "Point : (point) / Bobot : (bobot_point)" }
+              { name: "Penyisihan Sekolah 7", info: "Point" },
+              { name: "Penyisihan Sekolah 8", info: "Point" },
+              { name: "Penyisihan Sekolah 9", info: "Point" }
             ]
           }
         ]
@@ -60,7 +60,7 @@
     // const data = @json($data);
 
     const width = 1000;
-    const height = 700;
+    const height = 800;
 
     const svg = d3.select("body")
       .append("svg")

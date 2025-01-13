@@ -1,8 +1,6 @@
-@extends('templates.templates')
+@extends('backend.templates.pages')
 @section('title', 'Dashboard')
-@section('sidebar')
-@include('templates.subtemplates.sidebar')
-@endsection
+
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
@@ -15,7 +13,7 @@
   </div>
 </div>
 @endsection
-@section('pages')
+@section('content')
 <div class="container-xl">
   
 </div>

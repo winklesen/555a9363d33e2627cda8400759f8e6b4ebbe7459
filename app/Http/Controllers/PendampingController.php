@@ -9,11 +9,21 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PendampingController extends Controller
 {
-    public function index(Request $request, $provinsiId, $sekolahId) {
+    public function index(Request $request) {
         if ($request->ajax()) {
-            $data = Pendamping::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC');
+            $data = Pendamping::where('status', 1);
+
+            if ($request->sekolah_id) {
+                $data->where('sekolah_id', $request->sekolah_id);
+            }
+
+            $data = $data->orderBy('created_at', 'DESC');
+
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('sekolah', function ($row) {
+                    return $row->sekolah->nama_sekolah;
+                })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-list">';
                     $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
@@ -26,25 +36,26 @@ class PendampingController extends Controller
                 ->make(true);
         }
 
-        $sekolah = Sekolah::find($sekolahId);
-        $pendampings = Pendamping::where('sekolah_id', $sekolahId)->orderBy('created_at', 'DESC')->get();
+        $sekolahs = Sekolah::where('status', 1)->get();
+        $pendampings = Pendamping::where('status', 1)->orderBy('created_at', 'DESC')->get();
     
-        return view('admin.pendamping', compact(
-            'sekolah',
+        return view('backend.pendamping', compact(
+            'sekolahs',
             'pendampings',
         ));
     }
 
-    public function create($provinsiId, $sekolahId) {}
+    public function create() {}
 
-    public function store(Request $request, $provinsiId, $sekolahId) {
+    public function store(Request $request) {
         try {
             $request->validate([
+                'sekolah_id' => 'required',
                 'nama_pendamping' => 'required',
             ]);
 
             Pendamping::create([
-                'sekolah_id' => $sekolahId,
+                'sekolah_id' => $request['sekolah_id'],
                 'nama_pendamping' => $request['nama_pendamping'],
             ]);
     
@@ -54,23 +65,25 @@ class PendampingController extends Controller
         }
     }
 
-    public function show($provinsiId, $sekolahId, $id) {
+    public function show($id) {
         $pendamping = Pendamping::find($id);
 
         return response()->json($pendamping);
     }
 
-    public function edit($provinsiId, $sekolahId, $id) {}
+    public function edit($id) {}
 
-    public function update(Request $request, $provinsiId, $sekolahId, $id) {
+    public function update(Request $request, $id) {
         try {
             $pendamping = Pendamping::find($id);
 
             $request->validate([
+                'sekolah_id' => 'required',
                 'nama_pendamping' => 'required',
             ]);
 
             $pendamping->update([
+                'sekolah_id' => $request['sekolah_id'],
                 'nama_pendamping' => $request['nama_pendamping'],
             ]);
     
@@ -80,12 +93,14 @@ class PendampingController extends Controller
         }
     }
 
-    public function destroy($provinsiId, $sekolahId, $id) {
+    public function destroy($id) {
         try {
             $pendamping = Pendamping::find($id);
 
             if ($pendamping) {
-                $pendamping->delete();
+                $pendamping->update([
+                    'status' => 0,
+                ]);
             }
     
             return response()->json(['success' => true]);

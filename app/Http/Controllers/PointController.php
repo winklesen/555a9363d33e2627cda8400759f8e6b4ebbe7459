@@ -11,25 +11,10 @@ class PointController extends Controller
         try {
             $request->validate([
                 'sekolah_id' => 'required',
-                'game_id' => 'required',
-                'point_sesi_satu' => 'required',
-                'point_sesi_dua' => 'required',
-                'point_sesi_tiga' => 'required',
             ]);
-
-            $bobotPointSesiSatu = $request['point_sesi_satu'] * 0.2;
-            $bobotPointSesiDua = $request['point_sesi_dua'] * 0.3;
-            $bobotPointSesiTiga = $request['point_sesi_tiga'] * 0.5;
 
             Point::create([
                 'sekolah_id' => $request['sekolah_id'],
-                'game_id' => $request['game_id'],
-                'point_sesi_satu' => $request['point_sesi_satu'],
-                'point_sesi_dua' => $request['point_sesi_dua'],
-                'point_sesi_tiga' => $request['point_sesi_tiga'],
-                'bobot_point_sesi_satu' => $bobotPointSesiSatu,
-                'bobot_point_sesi_dua' => $bobotPointSesiDua,
-                'bobot_point_sesi_tiga' => $bobotPointSesiTiga,
             ]);
     
             return response()->json(['success' => true]);

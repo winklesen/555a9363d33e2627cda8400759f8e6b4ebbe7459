@@ -10,15 +10,17 @@ class ProvinsiController extends Controller
 {
     public function index(Request $request) {
         if ($request->ajax()) {
-            $data = Provinsi::select('*')->orderBy('created_at', 'DESC');
+            $data = Provinsi::where('status', 1)->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('tanggal_mulai', function ($row) {
+                    return \Carbon\Carbon::parse($row->tanggal_mulai)->format('d M Y');
+                })
+                ->addColumn('tanggal_selesai', function ($row) {
+                    return \Carbon\Carbon::parse($row->tanggal_selesai)->format('d M Y');
+                })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-list">';
-                    $html .= '<a href="' . route('admin.provinsi.sesi-1.tema.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 1</a>';
-                    $html .= '<a href="' . route('admin.provinsi.sesi-2.pertanyaan.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 2</a>';
-                    $html .= '<a href="' . route('admin.provinsi.sesi-3.pertanyaan.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sesi 3</a>';
-                    $html .= '<a href="' . route('admin.provinsi.sekolah.index', ['provinsiId' => $row->id]) . '" class="btn btn-success">Sekolah</a>';
                     $html .= '<button class="btn btn-primary edit" data-id="' . $row->id . '">Edit</button>';
                     $html .= '<button class="btn btn-danger delete" data-id="' . $row->id . '">Hapus</button>';
                     $html .= '</div>';
@@ -29,9 +31,9 @@ class ProvinsiController extends Controller
                 ->make(true);
         }
 
-        $provinsis = Provinsi::orderBy('created_at', 'DESC')->get();
+        $provinsis = Provinsi::where('status', 1)->orderBy('created_at', 'DESC')->get();
     
-        return view('admin.provinsi', compact(
+        return view('backend.provinsi', compact(
             'provinsis',
         ));
     }
@@ -42,10 +44,15 @@ class ProvinsiController extends Controller
         try {
             $request->validate([
                 'nama_provinsi' => 'required',
+                'tanggal_mulai' => 'required',
+                'tanggal_selesai' => 'required',
             ]);
 
             Provinsi::create([
                 'nama_provinsi' => $request['nama_provinsi'],
+                'nama_kota' => $request['nama_kota'],
+                'tanggal_mulai' => $request['tanggal_mulai'],
+                'tanggal_selesai' => $request['tanggal_selesai'],
             ]);
     
             return response()->json(['success' => true]);
@@ -68,10 +75,15 @@ class ProvinsiController extends Controller
 
             $request->validate([
                 'nama_provinsi' => 'required',
+                'tanggal_mulai' => 'required',
+                'tanggal_selesai' => 'required',
             ]);
 
             $provinsi->update([
                 'nama_provinsi' => $request['nama_provinsi'],
+                'nama_kota' => $request['nama_kota'],
+                'tanggal_mulai' => $request['tanggal_mulai'],
+                'tanggal_selesai' => $request['tanggal_selesai'],
             ]);
     
             return response()->json(['success' => true]);
@@ -85,7 +97,9 @@ class ProvinsiController extends Controller
             $provinsi = Provinsi::find($id);
 
             if ($provinsi) {
-                $provinsi->delete();
+                $provinsi->update([
+                    'status' => 0,
+                ]);
             }
     
             return response()->json(['success' => true]);

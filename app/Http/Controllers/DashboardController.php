@@ -9,6 +9,6 @@ use App\Models\Point;
 class DashboardController extends Controller
 {
     public function dashboard() {
-        return view('admin.dashboard');
+        return view('backend.dashboard');
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sekolah_id');
             $table->string('nama_pendamping');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

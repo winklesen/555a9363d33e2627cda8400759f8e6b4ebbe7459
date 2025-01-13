@@ -53,6 +53,6 @@ class ChartController extends Controller
             ]
         ];
     
-        return view('charts.penyisihan', compact('data'));
+        return view('frontend.charts.penyisihan', compact('data'));
     }
 }

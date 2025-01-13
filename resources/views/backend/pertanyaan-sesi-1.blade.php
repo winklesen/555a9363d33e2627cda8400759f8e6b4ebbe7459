@@ -1,35 +1,52 @@
-@extends('templates.templates')
+@extends('backend.templates.pages')
 @section('title', 'Pertanyaan')
-@section('sidebar')
-@include('templates.subtemplates.sidebar')
-@endsection
 @section('header')
 <div class="container-xl">
   <div class="row g-2 align-items-center">
     <div class="col">
-      <h2 class="page-title">Provinsi : {{ $tema->provinsi->nama_provinsi }} / Sesi 1 / Tema : {{ Str::limit($tema->tema, 20, '...') }} / Pertanyaan</h2>
+      <h2 class="page-title">Pertanyaan Sesi 1</h2>
     </div>
     <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
-        <a href="{{ route('admin.provinsi.sesi-1.tema.index', ['provinsiId' => $tema->provinsi->id]) }}" class="btn btn-primary">Kembali</a>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tambah</button>
       </div>
     </div>
   </div>
 </div>
 @endsection
-@section('pages')
+@section('content')
 <div class="container-xl">
+  <div class="row g-2 mb-2">
+    <div class="col-3">
+      <select id="filterProvinsi" class="form-select select2">
+        <option value="">Semua</option>
+        @foreach($provinsis as $provinsi)
+          <option value="{{ $provinsi->id }}">{{ $provinsi->nama_provinsi }}</option>
+        @endforeach
+      </select>
+    </div>
+    <div class="col-3">
+      <select id="filterTema" class="form-select select2">
+        <option value="">Semua</option>
+        @foreach($temas as $tema)
+          <option value="{{ $tema->id }}">{{ $tema->tema }}</option>
+        @endforeach
+      </select>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
-      @include('alert')
       <div class="card">
         <div class="table-responsive p-3">
           <table id="DataTable" class="table table-vcenter card-table table-striped">
             <thead>
               <tr>
                 <th>No.</th>
+                <th>Provinsi</th>
+                <th>Tema</th>
                 <th>Pertanyaan</th>
+                <th>Jawaban</th>
+                <th>Status Aktif</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -53,11 +70,20 @@
       <form id="createForm">
         @csrf
         <div class="modal-body">
-          <div class="mb-3">
+          <div class="mt-3">
+            <label class="form-label required">Tema</label>
+            <select class="form-select select2" name="tema_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($temas as $tema)
+                <option value="{{ $tema->id }}">{{ $tema->provinsi->nama_provinsi }} - {{ $tema->tema }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
             <label class="form-label required">Pertanyaan</label>
             <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
           </div>
-          <div>
+          <div class="mt-3">
             <label class="form-label required">Jawaban</label>
             <div id="createAnswersContainer">
               <div class="d-flex gap-2 mb-2">
@@ -88,14 +114,31 @@
         @csrf
         @method('PUT')
         <div class="modal-body">
-          <div class="mb-3">
+          <div class="mt-3">
+            <label class="form-label required">Tema</label>
+            <select class="form-select select2" name="tema_id" required>
+              <option value="" selected disabled>Select</option>
+              @foreach($temas as $tema)
+                <option value="{{ $tema->id }}">{{ $tema->provinsi->nama_provinsi }} - {{ $tema->tema }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="mt-3">
             <label class="form-label required">Pertanyaan</label>
             <textarea class="form-control" name="pertanyaan" rows="5" placeholder="Pertanyaan" required></textarea>
           </div>
-          <div>
+          <div class="mt-3">
             <label class="form-label required">Jawaban</label>
             <div id="editAnswersContainer"></div>
             <button type="button" class="btn btn-primary" id="addEditAnswer">Tambah</button>
+          </div>
+          <div class="mt-3">
+            <div class="form-label required">Status Aktif</div>
+            <select class="form-select" name="status_aktif" required>
+              <option disabled selected value="">Pilih</option>
+              <option value="1">Aktif</option>
+              <option value="0">Tidak Aktif</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -109,8 +152,6 @@
 @endsection
 @push('scripts')
 <script>
-  var provinsiId = '{{ $tema->provinsi->id }}';
-  var temaId = '{{ $tema->id }}';
   let deletedAnswerIds = [];
   
   $(document).ready(function () {
@@ -120,10 +161,10 @@
           paging: true,
           searching: true,
           ajax: {
-            url: "{{ route('admin.provinsi.sesi-1.tema.pertanyaan.index', ['provinsiId' => ':provinsiId', 'temaId' => ':temaId']) }}".replace(':provinsiId', provinsiId).replace(':temaId', temaId),
+            url: "{{ route('admin.pertanyaan-sesi-1.index') }}",
             data: function (d) {
-              d.provinsiId = provinsiId;
-              d.temaId = temaId;
+                d.provinsi_id = $('#filterProvinsi').val();
+                d.tema_id = $('#filterTema').val();
             }
           },
           columns: [
@@ -135,14 +176,22 @@
                   return meta.row + 1;
                 }
               },
+              { data: 'provinsi', name: 'provinsi', searchable: false },
+              { data: 'tema', name: 'tema', searchable: false },
               { data: 'pertanyaan', name: 'pertanyaan' },
+              { data: 'jawaban', name: 'jawaban', searchable: false },
+              { data: 'status_aktif', name: 'status_aktif', searchable: false },
               { data: 'action', name: 'action', orderable: false, searchable: false }
           ]
       });
 
-      setInterval(function () {
-        $('#DataTable').DataTable().ajax.reload(null, false);
-      }, 3000);
+      $('#filterProvinsi').change(function () {
+          $('#DataTable').DataTable().ajax.reload(null, false);
+      });
+
+      $('#filterTema').change(function () {
+          $('#DataTable').DataTable().ajax.reload(null, false);
+      });
   });
 
   $('#addCreateAnswer').click(function() {
@@ -165,7 +214,7 @@
   });
 
   $(document).on('click', '.hapusJawaban', function() {
-      const answerContainer = $(this).closest('.input-group');
+      const answerContainer = $(this).closest('.d-flex');
       const answerId = answerContainer.find('input[name="jawaban_ids[]"]').val();
       
       if (answerId) {
@@ -182,7 +231,7 @@
       var formData = $(this).serialize();
 
       $.ajax({
-          url: "{{ route('admin.provinsi.sesi-1.tema.pertanyaan.store', [':provinsiId', ':temaId']) }}".replace(':provinsiId', provinsiId).replace(':temaId', temaId),
+          url: "{{ route('admin.pertanyaan-sesi-1.store') }}",
           method: "POST",
           data: formData,
           success: function(response) {
@@ -229,9 +278,16 @@
       const id = $(this).data('id');
       
       $.ajax({
-          url: "{{ route('admin.provinsi.sesi-1.tema.pertanyaan.show', [':provinsiId', ':temaId', ':id']) }}".replace(':provinsiId', provinsiId).replace(':temaId', temaId).replace(':id', id),
+          url: "{{ route('admin.pertanyaan-sesi-1.show', [':id']) }}".replace(':id', id),
           method: 'GET',
           success: function(data) {
+              $('#editForm [name="tema_id"] option').each(function () {
+                if ($(this).val() == data.tema_id) {
+                  $(this).prop('selected', true);
+                } else {
+                  $(this).prop('selected', false);
+                }
+              });
               $('#editForm [name="pertanyaan"]').val(data.pertanyaan);
               $('#editForm').attr('data-id', id);
               
@@ -255,7 +311,13 @@
                       </div>
                   `);
               }
-              
+              $('#editForm [name="status_aktif"] option').each(function () {
+                if ($(this).val() == data.status_aktif) {
+                  $(this).prop('selected', true);
+                } else {
+                  $(this).prop('selected', false);
+                }
+              });
               $('#editModal').modal('show');
               $.LoadingOverlay("hide");
           }
@@ -266,14 +328,13 @@
       e.preventDefault();
       $.LoadingOverlay("show");
 
+      const id = $(this).attr('data-id');
+
       const formData = new FormData(this);
       formData.append('deleted_jawaban_ids', JSON.stringify(deletedAnswerIds));
 
       $.ajax({
-          url: "{{ route('admin.provinsi.sesi-1.tema.pertanyaan.update', [':provinsiId', ':temaId', ':id']) }}"
-              .replace(':provinsiId', provinsiId)
-              .replace(':temaId', temaId)
-              .replace(':id', $(this).attr('data-id')),
+        url: "{{ route('admin.pertanyaan-sesi-1.update', [':id']) }}".replace(':id', id),
           method: "POST",
           data: formData,
           processData: false,
@@ -313,10 +374,7 @@
 
   $(document).on('click', '.delete', function() {
       var id = $(this).data('id');
-      var deleteUrl = "{{ route('admin.provinsi.sesi-1.tema.pertanyaan.destroy', [':provinsiId', ':temaId', ':id']) }}"
-          .replace(':provinsiId', provinsiId)
-          .replace(':temaId', temaId)
-          .replace(':id', id);
+      var url = "{{ route('admin.tema.destroy', [':id']) }}".replace(':id', id);
 
       Swal.fire({
           title: 'Apakah Anda yakin?',
@@ -328,7 +386,7 @@
       }).then((result) => {
           if (result.isConfirmed) {
               $.ajax({
-                  url: deleteUrl,
+                  url: url,
                   method: 'DELETE',
                   data: {
                       _token: '{{ csrf_token() }}',

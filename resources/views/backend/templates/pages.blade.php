@@ -11,6 +11,8 @@
     <link href="{{ asset('vendor/tabler/dist/css/tabler-payments.min.css?1692870487') }}" rel="stylesheet"/>
     <link href="{{ asset('vendor/tabler/dist/css/tabler-vendors.min.css?1692870487') }}" rel="stylesheet"/>
     <link href="{{ asset('vendor/tabler/dist/css/demo.min.css?1692870487') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
     <style>
       @import url('https://rsms.me/inter/inter.css');
@@ -27,16 +29,16 @@
   </head>
   <body>
     <div class="page">
-      @yield('sidebar')
-      @include('templates.subtemplates.navbar')
+      @include('backend.templates.subtemplates.sidebar')
+      @include('backend.templates.subtemplates.navbar')
       <div class="page-wrapper">
         <div class="page-header d-print-none">
           @yield('header')
         </div>
         <div class="page-body">
-          @yield('pages')
+          @yield('content')
         </div>
-        @include('templates.subtemplates.footer')
+        @include('backend.templates.subtemplates.footer')
       </div>
     </div>
     <script src="{{ asset('vendor/tabler/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487') }}" defer></script>
@@ -47,6 +49,7 @@
     <script src="{{ asset('vendor/tabler/dist/js/demo.min.js?1692870487') }}" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -57,6 +60,23 @@
       $(document).ready(function () {
         $('.number').on('input', function () {
           this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+            placeholder: "Select",
+            allowClear: true,
+            width: '100%',
+        });
+
+        $('#createModal, #editModal').on('shown.bs.modal', function () {
+            $(this).find('.select2').select2({
+                dropdownParent: $(this),
+                theme: 'bootstrap-5',
+                placeholder: "Select",
+                allowClear: true,
+                width: '100%',
+            });
         });
       });
     </script>

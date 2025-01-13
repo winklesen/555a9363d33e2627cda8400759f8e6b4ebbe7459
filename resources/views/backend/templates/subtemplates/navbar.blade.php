@@ -5,7 +5,7 @@
     </button>
     <div class="navbar-nav flex-row order-md-last">
       <div class="py-0 my-auto">
-        <select class="form-select" name="provinsi_id" required>
+        <select class="form-select selectProvinsi" name="provinsi_id" required>
           <option value="">Semua</option>
         </select>
       </div>
@@ -28,10 +28,10 @@
 @push('scripts')
 <script>
   $.ajax({
-    url: '{{ route('ajax.provinsi') }}',
+    url: '{{ route('admin.user') }}',
     method: 'GET',
     success: function(response) {
-      const select = $('select[name="provinsi_id"]');
+      const select = $('.selectProvinsi');
 
       response.provinsis.forEach(function(provinsi) {
         const selected = provinsi.id === response.user.provinsi_id ? 'selected' : '';
@@ -40,7 +40,7 @@
     }
   });
 
-  $('select[name="provinsi_id"]').change(function() {
+  $('.selectProvinsi').change(function() {
     var provinsiId = $(this).val();
 
     if (provinsiId === "") {
@@ -48,7 +48,7 @@
     }
 
     $.ajax({
-      url: '{{ route('ajax.update-provinsi') }}',
+      url: '{{ route('admin.update-provinsi') }}',
       method: 'POST',
       data: {
         _token: '{{ csrf_token() }}',

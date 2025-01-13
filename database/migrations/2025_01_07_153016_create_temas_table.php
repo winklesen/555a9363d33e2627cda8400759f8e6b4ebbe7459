@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('provinsi_id');
             $table->string('tema');
+            $table->integer('sesi');
+            $table->integer('status_aktif')->default(1);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

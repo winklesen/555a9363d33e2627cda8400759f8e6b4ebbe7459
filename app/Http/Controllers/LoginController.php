@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function login() {
-        return view('login');
+        return view('backend.login');
     }
 
     public function postLogin(Request $request) {
@@ -43,7 +43,7 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 
-    public function provinsi() {
+    public function user() {
         $user = Auth::user();
         $provinsis = Provinsi::all();
 
