@@ -30,5 +30,6 @@ Route::middleware(['auth:web', 'disableBack'])->group(function() {
         Route::resource('pertanyaan-sesi-1', 'App\Http\Controllers\PertanyaanSesi1Controller');
         Route::resource('pertanyaan-sesi-2', 'App\Http\Controllers\PertanyaanSesi2Controller');
         Route::resource('pertanyaan-sesi-3', 'App\Http\Controllers\PertanyaanSesi3Controller');
+        Route::resource('game', 'App\Http\Controllers\GameController');
     });
 });
