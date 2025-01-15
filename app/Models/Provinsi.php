@@ -23,6 +23,10 @@ class Provinsi extends Model
         return $this->hasMany(Sekolah::class);
     }
 
+    public function provinsis() {
+        return $this->hasMany(Provinsi::class);
+    }
+
     public function temas() {
         return $this->hasMany(Tema::class);
     }
